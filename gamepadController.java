@@ -123,7 +123,7 @@ public class gamepadController extends OpMode
             hook.setPosition(servoPosition);
         }
         if (hookLeft == false && hookRight == false) {
-            hook.setPosition(servoPosition);
+            servoIncrement = 0;
         }
 
 
