@@ -21,7 +21,6 @@ public class gamepadController extends OpMode
     private DcMotor wenchDrive = null;
     private Servo hook = null;
     private double servoPosition = 0;
-    private double servoIncrement = 0.5;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -35,7 +34,7 @@ public class gamepadController extends OpMode
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         wenchDrive = hardwareMap.get(DcMotor.class, "wench");
-        hook = hardwareMap.get(Servo.class, "hook");
+        hook = hardwareMap.get(Servo.class, "hookServo");
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -67,7 +66,7 @@ public class gamepadController extends OpMode
      */
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
+        // Setup a variable for each part of the robot controlled by the gamepad
         double leftPower;
         double rightPower;
         boolean wenchPowerUp;
@@ -75,18 +74,7 @@ public class gamepadController extends OpMode
         boolean hookLeft;
         boolean hookRight;
 
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
-
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        //leftPower    = Range.clip(drive + turn, -1.0, 1.0);
-        //rightPower   = Range.clip(drive - turn, -1.0, 1.0);
-
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
+        //Sets up the gamepad buttons for each robot part variable
         leftPower  = gamepad1.left_stick_y;
         rightPower = gamepad1.right_stick_y;
         wenchPowerUp = gamepad1.y;
@@ -100,39 +88,36 @@ public class gamepadController extends OpMode
         rightDrive.setPower(rightPower);
 
         //sets calculated power to the wench motor/HEX motor
-        //Checks to see if the "y" button is not pushed and if the "a" button is pushed, then makes the wench pull the crane down if these conditions are true
         if (wenchPowerUp == true) {
             wenchDrive.setPower(0.5);
         }
-        //Checks to see if the "a" button is not pushed and if the "y" button is pushed and makes the wench pull the crane up if these conditions are true
         if (wenchPowerDown == true) {
             wenchDrive.setPower(-0.5);
         }
-        //Checks to see if the "y" button is not pushed and stops the wench if true
         if (wenchPowerUp == false && wenchPowerDown == false) {
             wenchDrive.setPower(0);
         }
 
         //conditionals for the servo
         if (hookRight == true) {
-            servoPosition += servoIncrement;
+            servoPosition = 1;
             hook.setPosition(servoPosition);
         }
         if (hookLeft == true) {
-            servoPosition -= servoIncrement;
-            hook.setPosition(servoPosition);
+            servoPosition = 0;
         }
         if (hookLeft == false && hookRight == false) {
-            servoIncrement = 0;
+            servoPosition = 0.5;
         }
 
-
-
+        //sets the position data to the servo at this moment
+        hook.setPosition(servoPosition);
 
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.addData("Servo Position:", "(%.2f)", servoPosition);
     }
 
     /*
