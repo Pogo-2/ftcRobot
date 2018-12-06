@@ -21,7 +21,7 @@ public class gamepadController extends OpMode
     private DcMotor wenchDrive = null;
     private Servo hook = null;
     private double servoPosition = 0;
-    private mPulse = 0;
+    private double mPulse = 0;
     /*
      * Code to run ONCE when the driver hits INIT
      */
