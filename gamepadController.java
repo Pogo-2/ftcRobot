@@ -21,13 +21,14 @@ public class gamepadController extends OpMode
     private DcMotor wenchDrive = null;
     private Servo hook = null;
     private double servoPosition = 0;
+    private mPulse = 0;
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-
+        
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -35,6 +36,10 @@ public class gamepadController extends OpMode
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         wenchDrive = hardwareMap.get(DcMotor.class, "wench");
         hook = hardwareMap.get(Servo.class, "hookServo");
+        
+        
+          //wench motorDrive encoder enabled
+        wenchDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS)
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -81,8 +86,10 @@ public class gamepadController extends OpMode
         wenchPowerDown = gamepad1.a;
         hookRight = gamepad1.b;
         hookLeft = gamepad1.x;
-
-
+        
+        //track motor pulses on wench
+        mPulse = wenchDrive.getCurrentPosition();
+        
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
@@ -118,6 +125,8 @@ public class gamepadController extends OpMode
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("Servo Position:", "(%.2f)", servoPosition);
+        //track wench pulse
+        telemetry,addData("wench distance:" "(%.2f)", mPulse;
     }
 
     /*
