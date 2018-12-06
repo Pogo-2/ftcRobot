@@ -21,7 +21,7 @@ public class gamepadController extends OpMode
     private DcMotor wenchDrive = null;
     private Servo hook = null;
     private double servoPosition = 0;
-    private double mPulse = 0;
+    
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -78,6 +78,7 @@ public class gamepadController extends OpMode
         boolean wenchPowerDown;
         boolean hookLeft;
         boolean hookRight;
+        double mPulse;
 
         //Sets up the gamepad buttons for each robot part variable
         leftPower  = gamepad1.left_stick_y;
