@@ -46,6 +46,8 @@ public class autonomousHighVol extends OpMode
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private Servo hook = null;
+    private wenchUpPower = 0.5;
+    private wenchDownPower = -0.5;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -60,13 +62,9 @@ public class autonomousHighVol extends OpMode
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         hook = hardwareMap.get(Servo.class, "hookServo");
+        
 
 
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
