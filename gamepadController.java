@@ -38,9 +38,9 @@ public class gamepadController extends OpMode
         hook = hardwareMap.get(Servo.class, "hookServo");
         
         
-          //wench motorDrive encoder enabled
-        wenchDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS)
-
+          //wench motorDrive encoder enabled & zero
+        wenchDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        wenchDrive.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
