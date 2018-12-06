@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
+@Autonomous(name="Basic: Iterative OpMode", group="Iterative Opmode")
 //@Disabled
 public class autonomousHighVol extends OpMode
 {
