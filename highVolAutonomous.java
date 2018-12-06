@@ -29,17 +29,6 @@
 
 
 
-
-
-
-
-
-
-
-
-//yo yo yo its pac man
-
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -51,7 +40,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 
-@Autonomous(name="Basic: Iterative OpMode", group="Iterative Opmode")
+@Autonomous(name="Autonomous", group="Iterative Opmode")
 //@Disabled
 public class autonomousHighVol extends OpMode
 {
