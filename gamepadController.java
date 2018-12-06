@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -28,7 +29,7 @@ public class gamepadController extends OpMode
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-        
+
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -36,9 +37,9 @@ public class gamepadController extends OpMode
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         wenchDrive = hardwareMap.get(DcMotor.class, "wench");
         hook = hardwareMap.get(Servo.class, "hookServo");
-        
-        
-          //wench motorDrive encoder enabled
+
+
+        //wench motorDrive encoder enabled
         wenchDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS)
 
 
@@ -86,10 +87,10 @@ public class gamepadController extends OpMode
         wenchPowerDown = gamepad1.a;
         hookRight = gamepad1.b;
         hookLeft = gamepad1.x;
-        
+
         //track motor pulses on wench
         mPulse = wenchDrive.getCurrentPosition();
-        
+
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
@@ -126,7 +127,7 @@ public class gamepadController extends OpMode
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("Servo Position:", "(%.2f)", servoPosition);
         //track wench pulse
-        telemetry,addData("wench distance:" "(%.2f)", mPulse;
+        telemetry.addData("wench distance:" ,"(%.2f)", mPulse);
     }
 
     /*
@@ -137,7 +138,3 @@ public class gamepadController extends OpMode
     }
 }
 
-
-
-//TO CONNECT THE CONTROLLER TO THE PHONE POWER THE CONTROLLER ON AND PRESS "START" + "A" ON THE CONTROLLER TO USE
-//THE NAME "gamepad1" AND "START" + "B" FOR THE NAME "gamepad2"
