@@ -49,8 +49,8 @@ public class autonomousHighVol extends OpMode
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private Servo hook = null;
-    private wenchUpPower = 0.5;
-    private wenchDownPower = -0.5;
+    private DcMotor wenchPower = null;
+    private double mPulse = 0;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -65,9 +65,7 @@ public class autonomousHighVol extends OpMode
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         hook = hardwareMap.get(Servo.class, "hookServo");
-        
-
-
+        wenchPower = harwareMap.get(DcMotor.class, "wenchPower")        
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -86,6 +84,13 @@ public class autonomousHighVol extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        
+        //prep encoder
+        wenchPower.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        wenchPower.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        
+        
+        
     }
 
     /*
@@ -93,8 +98,16 @@ public class autonomousHighVol extends OpMode
      */
     @Override
     public void loop() {
+       
+        //set mPulse
+        mPulse = wenchPower.getCurrentPosition();
         
-
+        //move wench (FIND VALUE AND IMPUT for X !!!!!!1)
+       // wenchPower.setTargetPosition( X );
+        
+        //shows the wench pulses
+        telemetry.addData("Pulse Count","%.2f",mPulse);        
+        
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
 
