@@ -119,6 +119,8 @@ public class highVolAutonomous extends OpMode {
     @Override
     public void start() {
         wenchDrive.RunMode.RUN_TO_POSITION(2080);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         runtime.reset();
     }
