@@ -20,7 +20,7 @@ public class gamepadController extends OpMode {
     private DcMotor wenchDrive = null;
     private Servo hook = null;
     private double servoPosition = 0;
-    private double mPulse = 0;
+    private double wPulse = 0;
     private double leftPulse = 0;
     private double rightPulse = 0;
     /*
@@ -88,7 +88,7 @@ public class gamepadController extends OpMode {
         hookLeft = gamepad1.x;
         
         //track motor pulses on wench
-        mPulse = wenchDrive.getCurrentPosition();
+        wPulse = wenchDrive.getCurrentPosition();
         leftPulse = leftDrive.getCurrentPosition();
         rightPulse = rightDrive.getCurrentPosition();
         
@@ -128,7 +128,7 @@ public class gamepadController extends OpMode {
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("Servo Position:", "(%.2f)", servoPosition);
         //track wench pulse
-        telemetry.addData("wench position:", "(%.2f)", mPulse);
+        telemetry.addData("wench position:", "(%.2f)", wPulse);
         //track drive motor pulse
         telemetry.addData("left drive position:", "(%.2f)", leftPulse);
         telemetry.addData("right drive position", "(%.2f)", rightPulse);
