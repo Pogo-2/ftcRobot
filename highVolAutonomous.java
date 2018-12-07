@@ -49,8 +49,8 @@ public class autonomousHighVol extends OpMode
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private Servo hook = null;
-    private wenchUpPower = 0.5;
-    private wenchDownPower = -0.5;
+    private DcMotor wenchPower = null;
+    private double mPulse = 0;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -65,12 +65,23 @@ public class autonomousHighVol extends OpMode
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         hook = hardwareMap.get(Servo.class, "hookServo");
-        
-
-
+        wenchPower = harwareMap.get(DcMotor.class, "wench")        
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+        
+        //prep encoder
+        wenchPower.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        wenchPower.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        leftDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rightDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        
+        // Most robots need the motor on one side to be reversed to drive forward
+        // Reverse the motor that runs backwards when connected directly to the battery
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        
+        
     }
 
     /*
@@ -86,6 +97,7 @@ public class autonomousHighVol extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        
     }
 
     /*
@@ -93,8 +105,22 @@ public class autonomousHighVol extends OpMode
      */
     @Override
     public void loop() {
+        //set variables 
+        double wPulse;
+        double leftPower;
+        double rightPower;
+        boolean wenchPowerUp;
+        boolean wenchPowerDown;
         
-
+        //set mPulse
+        wPulse = wenchPower.getCurrentPosition();
+        
+        //move wench (FIND VALUE AND IMPUT for X !!!!!!1)
+       // wenchPower.setTargetPosition( X );
+        
+        //shows the wench pulses
+        telemetry.addData("Pulse Count","%.2f",wPulse);        
+        
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
 

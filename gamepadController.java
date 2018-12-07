@@ -21,7 +21,7 @@ public class gamepadController extends OpMode
     private DcMotor wenchDrive = null;
     private Servo hook = null;
     private double servoPosition = 0;
-    private double mPulse = 0;
+    
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -78,6 +78,7 @@ public class gamepadController extends OpMode
         boolean wenchPowerDown;
         boolean hookLeft;
         boolean hookRight;
+        double wPulse;
 
         //Sets up the gamepad buttons for each robot part variable
         leftPower  = gamepad1.left_stick_y;
@@ -88,7 +89,7 @@ public class gamepadController extends OpMode
         hookLeft = gamepad1.x;
         
         //track motor pulses on wench
-        mPulse = wenchDrive.getCurrentPosition();
+        wPulse = wenchDrive.getCurrentPosition();
         
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
@@ -126,7 +127,7 @@ public class gamepadController extends OpMode
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("Servo Position:", "(%.2f)", servoPosition);
         //track wench pulse
-        telemetry,addData("wench distance:" "(%.2f)", mPulse;
+        telemetry,addData("wench distance:" "(%.2f)", wPulse;
     }
 
     /*
