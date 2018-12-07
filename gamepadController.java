@@ -41,8 +41,8 @@ public class gamepadController extends OpMode {
 
         //wench motorDrive encoder enabled
         wenchDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_WITH_ENCDODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -65,7 +65,18 @@ public class gamepadController extends OpMode {
      */
     @Override
     public void start() {
+
+        wenchDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        wenchDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
         runtime.reset();
+
     }
 
     /*
@@ -86,8 +97,8 @@ public class gamepadController extends OpMode {
         rightPower = gamepad1.right_stick_y;
         wenchPowerUp = gamepad1.y;
         wenchPowerDown = gamepad1.a;
-        hookRight = gamepad1.b;
-        hookLeft = gamepad1.x;
+        hookRight = gamepad1.x;
+        hookLeft = gamepad1.b;
         
         //track motor pulses on wench
         wPulse = wenchDrive.getCurrentPosition();
@@ -95,8 +106,8 @@ public class gamepadController extends OpMode {
         rightPulse = rightDrive.getCurrentPosition();
         
         // Send calculated power to wheels
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+        leftDrive.setPower(leftPower/2);
+        rightDrive.setPower(rightPower/2);
 
         //sets calculated power to the wench motor/HEX motor
         if (wenchPowerUp == true) {
@@ -143,5 +154,7 @@ public class gamepadController extends OpMode {
     public void stop() {
     }
 }
+
+
 
 
