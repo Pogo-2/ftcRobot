@@ -118,10 +118,38 @@ public class highVolAutonomous extends OpMode {
      */
     @Override
     public void start() {
-        wenchDrive.RunMode.RUN_TO_POSITION(2080);
+    //creat variables
+    // != imput value
+      double wenchRaiseOne = 760;
+      double wenchRaiseTwo = !;
+      double inchForward = !;
+        
+        //zero drive motors
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        //zero wench
+        wenchDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        
+        //start of movement
+        
+        //low robot(raise wench)
+        wenchDrive.RunMode.RUN_TO_POSITION(wenchRaiseOne);
+        
+        //inch forward (imput distance in var)
+        leftDrive.RunMode.RUN_TO_POSITION(inchForward);
+        rightDrive.RunMode.RUN_TO_POSITION(inchForward);
+        
+        //final wnch raise
+        wenchDrive.RunMode.RUN_TO_POSITION(wenchRaiseTwo);
+        
+        //servo position
+        //test friday
+            double servoP = !;
+        hook.setPosition(servoP);
+       
+        
+        
+        
         runtime.reset();
     }
 
