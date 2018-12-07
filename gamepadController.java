@@ -41,6 +41,8 @@ public class gamepadController extends OpMode {
 
         //wench motorDrive encoder enabled
         wenchDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITH_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITH_ENCDODER);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
