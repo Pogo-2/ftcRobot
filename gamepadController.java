@@ -4,16 +4,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 
 
 @TeleOp(name="gamepadController", group="Iterative Opmode")
 //@Disabled
-public class gamepadController extends OpMode
-{
+public class gamepadController extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
@@ -21,7 +20,9 @@ public class gamepadController extends OpMode
     private DcMotor wenchDrive = null;
     private Servo hook = null;
     private double servoPosition = 0;
-    
+    private double mPulse = 0;
+    private double leftPulse = 0;
+    private double rightPulse = 0;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -36,11 +37,10 @@ public class gamepadController extends OpMode
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         wenchDrive = hardwareMap.get(DcMotor.class, "wench");
         hook = hardwareMap.get(Servo.class, "hookServo");
-        
-        
-          //wench motorDrive encoder enabled & zero
-        wenchDrive.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        wenchDrive.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+
+        //wench motorDrive encoder enabled
+        wenchDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -78,7 +78,6 @@ public class gamepadController extends OpMode
         boolean wenchPowerDown;
         boolean hookLeft;
         boolean hookRight;
-        double wPulse;
 
         //Sets up the gamepad buttons for each robot part variable
         leftPower  = gamepad1.left_stick_y;
@@ -89,7 +88,9 @@ public class gamepadController extends OpMode
         hookLeft = gamepad1.x;
         
         //track motor pulses on wench
-        wPulse = wenchDrive.getCurrentPosition();
+        mPulse = wenchDrive.getCurrentPosition();
+        leftPulse = leftDrive.getCurrentPosition();
+        rightPulse = rightDrive.getCurrentPosition();
         
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
@@ -127,7 +128,10 @@ public class gamepadController extends OpMode
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("Servo Position:", "(%.2f)", servoPosition);
         //track wench pulse
-        telemetry,addData("wench distance:" "(%.2f)", wPulse;
+        telemetry.addData("wench position:", "(%.2f)", mPulse);
+        //track drive motor pulse
+        telemetry.addData("left drive position:", "(%.2f)", leftPulse);
+        telemetry.addData("right drive position", "(%.2f)", rightPulse);
     }
 
     /*
@@ -139,6 +143,3 @@ public class gamepadController extends OpMode
 }
 
 
-
-//TO CONNECT THE CONTROLLER TO THE PHONE POWER THE CONTROLLER ON AND PRESS "START" + "A" ON THE CONTROLLER TO USE
-//THE NAME "gamepad1" AND "START" + "B" FOR THE NAME "gamepad2"
