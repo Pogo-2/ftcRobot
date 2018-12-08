@@ -65,18 +65,7 @@ public class gamepadController extends OpMode {
      */
     @Override
     public void start() {
-
-        wenchDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        wenchDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
         runtime.reset();
-
     }
 
     /*
@@ -95,10 +84,10 @@ public class gamepadController extends OpMode {
         //Sets up the gamepad buttons for each robot part variable
         leftPower  = gamepad1.left_stick_y;
         rightPower = gamepad1.right_stick_y;
-        wenchPowerUp = gamepad1.y;
-        wenchPowerDown = gamepad1.a;
-        hookRight = gamepad1.x;
-        hookLeft = gamepad1.b;
+        wenchPowerUp = gamepad2.y;
+        wenchPowerDown = gamepad2.a;
+        hookRight = gamepad2.x;
+        hookLeft = gamepad2.b;
         
         //track motor pulses on wench
         wPulse = wenchDrive.getCurrentPosition();
