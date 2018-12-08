@@ -55,8 +55,10 @@ public class highVolAutonomous extends OpMode {
     private Date date = new Date();
     private long startTime;
     private long end;
+    private boolean isLowered = false;
+    private boolean isUnlatched = false;
 
-    Thread t;
+    
 
 
     /*
@@ -105,11 +107,12 @@ public class highVolAutonomous extends OpMode {
         
         //start of movement
         
-        //low robot(raise wench)
+        //lower robot(raise wench)
         wenchDrive.setTargetPosition(wenchRaiseOne);
         wenchDrive.setPower(-1);
         wenchDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        
+        
         //unlatch hook
         end = startTime - 250;
         for(int x=0;x<=60000;x++) {
@@ -136,13 +139,28 @@ public class highVolAutonomous extends OpMode {
      */
     @Override
     public void loop() {
-        double wenchPos = 0;
+        //lower robot
+        if (isLowered = false) {
+            wenchDrive.setTargetPosition(wenchRaiseOne);
+            wenchDrive.setPower(-1);
+            wenchDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            isLowered = true;
+        }
 
-        wenchPos = wenchDrive.getCurrentPosition();
-
-        telemetry.addData("Wench Position:", "(%.2f)", wenchPos);
-
-
+        //unlatch hook
+        if (isUnlatched == false) {
+            for(int x=0;x<=60000;x++) {
+                if (startTime - end < 0.25) {
+                    hook.setPosition(0);
+                    end = System.currentTimeMillis();
+                } else {
+                    hook.setPosition(0.5);
+                    break;                   //break
+                }
+              
+            }
+            isUnlatched = true;
+        }
     }
 
     /*
