@@ -88,8 +88,7 @@ public class highVolAutonomous extends OpMode {
     @Override
     public void start() {
         //create variables
-        double wenchRaiseOne = 760;
-        double wenchRaiseTwo = null;
+        double wenchRaiseOne = 2100;
         double inchForward = 15;
         
         //zero drive motors
@@ -102,18 +101,15 @@ public class highVolAutonomous extends OpMode {
         
         //low robot(raise wench)
         wenchDrive.RunMode.RUN_TO_POSITION(wenchRaiseOne);
+        Thread.sleep(2000);
+        
+        //double servoP = ;
+        //hook.setPosition(servoP);
         
         //inch forward (input distance in var)
-        leftDrive.RunMode.RUN_TO_POSITION(inchForward);
-        rightDrive.RunMode.RUN_TO_POSITION(inchForward);
+        //leftDrive.RunMode.RUN_TO_POSITION(inchForward);
+        //rightDrive.RunMode.RUN_TO_POSITION(inchForward);
         
-        //collapse wench back into place
-        wenchDrive.RunMode.RUN_TO_POSITION(wenchRaiseTwo);
-        
-        //servo position
-        //test friday
-        double servoP = !;
-        hook.setPosition(servoP);
        
         
         
