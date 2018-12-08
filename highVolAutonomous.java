@@ -35,11 +35,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-
-
+import java.util.Date;
+import java.lang.*;
 
 @Autonomous(name="highVolAutonomous", group="Iterative Opmode")
 //@Disabled
@@ -52,6 +52,12 @@ public class highVolAutonomous extends OpMode {
     private Servo hook = null;
     private double wenchUpPower = 0.5;
     private double wenchDownPower = -0.5;
+    private Date date = new Date();
+    private long startTime;
+    private long end;
+
+    Thread t;
+
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -71,6 +77,7 @@ public class highVolAutonomous extends OpMode {
         //run the wench motor using the encoders in the wench motor
         wenchDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -88,9 +95,8 @@ public class highVolAutonomous extends OpMode {
     @Override
     public void start() {
         //create variables
-        double wenchRaiseOne = 2100;
-        double inchForward = 15;
-        
+        int wenchRaiseOne = 2085;
+        startTime = System.currentTimeMillis();
         //zero drive motors
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -100,21 +106,29 @@ public class highVolAutonomous extends OpMode {
         //start of movement
         
         //low robot(raise wench)
-        wenchDrive.RunMode.RUN_TO_POSITION(wenchRaiseOne);
-        Thread.sleep(2000);
+        wenchDrive.setTargetPosition(wenchRaiseOne);
+        wenchDrive.setPower(-1);
+        wenchDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //unlatch hook
+        end = startTime - 250;
+        for(int x=0;x<=60000;x++) {
+            if (startTime - end < 0.25) {
+                hook.setPosition(0);
+                end = System.currentTimeMillis();
+            } else {
+                hook.setPosition(0.5);
+                break;                   //break
+            }
+        }
+        hook.setPosition(0.5);
+
         
-        //double servoP = ;
-        //hook.setPosition(servoP);
+        //collapse wench back into place
+        //wenchDrive.RunMode.RUN_TO_POSITION(wenchRaiseTwo);
+
         
-        //inch forward (input distance in var)
-        //leftDrive.RunMode.RUN_TO_POSITION(inchForward);
-        //rightDrive.RunMode.RUN_TO_POSITION(inchForward);
-        
-       
-        
-        
-        
-        runtime.reset();
+        //runtime.reset();
     }
 
     /*
@@ -122,10 +136,12 @@ public class highVolAutonomous extends OpMode {
      */
     @Override
     public void loop() {
-        
+        double wenchPos = 0;
 
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        wenchPos = wenchDrive.getCurrentPosition();
+
+        telemetry.addData("Wench Position:", "(%.2f)", wenchPos);
+
 
     }
 
@@ -137,4 +153,5 @@ public class highVolAutonomous extends OpMode {
     }
 
 }
+
 
