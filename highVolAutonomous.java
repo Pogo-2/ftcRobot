@@ -1,34 +1,3 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -38,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import java.util.Date;
 import java.lang.*;
 
@@ -57,8 +27,8 @@ public class highVolAutonomous extends OpMode {
     private long end;
     private boolean isLowered = false;
     private boolean isUnlatched = false;
+    private modernRoboticsI2colorSensor colorTest = null;
 
-    
 
 
     /*
@@ -75,10 +45,13 @@ public class highVolAutonomous extends OpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         hook = hardwareMap.get(Servo.class, "hookServo");
         wenchDrive = hardwareMap.get(DcMotor.class, "wench");
+        colorTest = hwMap.get(modernRoboticsI2colorSensor.class,"color_sensor");
 
         //run the wench motor using the encoders in the wench motor
         wenchDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //turn on the led for color sensor
+        colorTest.enableled(true);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -89,6 +62,9 @@ public class highVolAutonomous extends OpMode {
      */
     @Override
     public void init_loop() {
+        //print color number
+        telemety.addData("color sensor output: ", colorTest.readUsingByte(modernRoboticsI2colorSensor.Register.Color_Number));
+        
     }
 
     /*
@@ -104,15 +80,15 @@ public class highVolAutonomous extends OpMode {
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //zero wench
         wenchDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        
+
         //start of movement
-        
+
         //lower robot(raise wench)
         wenchDrive.setTargetPosition(wenchRaiseOne);
         wenchDrive.setPower(-1);
         wenchDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        
-        
+
+
         //unlatch hook
         end = startTime - 250;
         for(int x=0;x<=60000;x++) {
@@ -126,11 +102,11 @@ public class highVolAutonomous extends OpMode {
         }
         hook.setPosition(0.5);
 
-        
+
         //collapse wench back into place
         //wenchDrive.RunMode.RUN_TO_POSITION(wenchRaiseTwo);
 
-        
+
         //runtime.reset();
     }
 
@@ -157,10 +133,12 @@ public class highVolAutonomous extends OpMode {
                     hook.setPosition(0.5);
                     break;                   //break
                 }
-              
+
             }
             isUnlatched = true;
         }
+
+
     }
 
     /*
@@ -171,5 +149,4 @@ public class highVolAutonomous extends OpMode {
     }
 
 }
-
 
