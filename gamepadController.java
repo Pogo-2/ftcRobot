@@ -1,148 +1,106 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
-@TeleOp(name="gamepadController", group="Iterative Opmode")
-//@Disabled
-public class gamepadController extends OpMode {
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
-    private DcMotor wenchDrive = null;
-    private Servo hook = null;
-    private double servoPosition = 0;
-    private double wPulse = 0;
-    private double leftPulse = 0;
-    private double rightPulse = 0;
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
-    @Override
+@Autonomous(name="highVolAutonomous", group="Iterative Opmode")
+public class highVolAutonomous extends OpMode {
+    DcMotor MotorL;
+    DcMotor MotorR;
+    DcMotor wench;
+    Servo hook;
+    // ColorSensor colSens;
+
+
+    // Code to run ONCE when the driver hits INIT
+
     public void init() {
-        telemetry.addData("Status", "Initialized");
-        
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        wenchDrive = hardwareMap.get(DcMotor.class, "wench");
-        hook = hardwareMap.get(Servo.class, "hookServo");
+        //init hardwear
+        MotorL = hardwareMap.dcMotor.get("mL");
+        MotorR = hardwareMap.dcMotor.get("mR");
+        wench = hardwareMap.dcMotor.get("wench");
+        hook = hardwareMap.servo.get("hookServo");
+        // colSens = hardwareMap.colorSensor.get("colSens");
 
 
-        //wench motorDrive encoder enabled
-        wenchDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        //MotorL
+        MotorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorL.setDirection(DcMotor.Direction.FORWARD);
+        //MotorR
+        MotorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorR.setDirection(DcMotor.Direction.REVERSE);
+        //Wench
+        wench.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
+
+        //init telemitry
+        telemetry.addData("status", "initialized");
+
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
-    @Override
     public void init_loop() {
+
+
     }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
-    @Override
     public void start() {
-        runtime.reset();
+
+
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
-    @Override
+
     public void loop() {
-        // Setup a variable for each part of the robot controlled by the gamepad
-        double leftPower;
-        double rightPower;
-        boolean wenchPowerUp;
-        boolean wenchPowerDown;
-        boolean hookLeft;
-        boolean hookRight;
+        int wenchRaiseOne = 1600;
+        boolean isLowered;
+        int move1 = 10000;
 
-        //Sets up the gamepad buttons for each robot part variable
-        leftPower  = gamepad1.left_stick_y;
-        rightPower = gamepad1.right_stick_y;
-        wenchPowerUp = gamepad2.y;
-        wenchPowerDown = gamepad2.a;
-        hookRight = gamepad2.x;
-        hookLeft = gamepad2.b;
-        
-        //track motor pulses on wench
-        wPulse = wenchDrive.getCurrentPosition();
-        leftPulse = leftDrive.getCurrentPosition();
-        rightPulse = rightDrive.getCurrentPosition();
-        
-        // Send calculated power to wheels
-        leftDrive.setPower(leftPower/2);
-        rightDrive.setPower(rightPower/2);
 
-        //sets calculated power to the wench motor/HEX motor
-        if (wenchPowerUp == true) {
-            wenchDrive.setPower(0.5);
-        }
-        if (wenchPowerDown == true) {
-            wenchDrive.setPower(-0.5);
-        }
-        if (wenchPowerUp == false && wenchPowerDown == false) {
-            wenchDrive.setPower(0);
+        //set servo pos
+        hook.setPosition(0);
+
+
+        //is the bot lowered
+        if (wenchRaiseOne <= (wench.getCurrentPosition())-10) {
+            isLowered = true;
+        } else {
+            isLowered = false;
         }
 
-        //conditionals for the servo
-        if (hookRight == true) {
-            servoPosition = 1;
-            hook.setPosition(servoPosition);
-        }
-        if (hookLeft == true) {
-            servoPosition = 0;
-        }
-        if (hookLeft == false && hookRight == false) {
-            servoPosition = 0.5;
+        //raises wench
+
+        if (isLowered == false) {
+            wench.setTargetPosition(wenchRaiseOne);
+            wench.setPower(-1);
+            wench.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }else{
+            hook.setPosition(.5);
         }
 
-        //sets the position data to the servo at this moment
-        hook.setPosition(servoPosition);
+       //move
+        if (isLowered == true) {
+            MotorL.setTargetPosition(move1);
+            MotorL.setPower(0.5);
+            MotorL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            MotorR.setTargetPosition(move1);
+            MotorR.setPower(0.5);
+            MotorR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
 
 
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-        telemetry.addData("Servo Position:", "(%.2f)", servoPosition);
-        //track wench pulse
-        telemetry.addData("wench position:", "(%.2f)", wPulse);
-        //track drive motor pulse
-        telemetry.addData("left drive position:", "(%.2f)", leftPulse);
-        telemetry.addData("right drive position", "(%.2f)", rightPulse);
-    }
-
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop() {
+        //pulse positions
+        telemetry.addData("encoder ", wench.getCurrentPosition());
+        telemetry.addData("time",getRuntime());
     }
 }
+
+
 
 
 
